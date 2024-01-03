@@ -2,8 +2,8 @@
   "development": {
     "username": "root",
     "password": "zob4hSbUGSAM",
-    "database": "featurerequest",
-    "host": "lynge.vps.webdock.cloud",
+    "database": "webdock",
+    "host": "team6.vps.webdock.cloud",
     "dialect": "mysql"
   },
   "test": {

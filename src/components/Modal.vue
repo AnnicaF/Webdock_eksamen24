@@ -6,7 +6,7 @@ import { ref } from "vue";
 const categories = ref(null);
 
 axios
-  .get("http://lynge.vps.webdock.cloud:3000/api/v1/category")
+  .get("http://localhost:3000/api/v1/category")
   .then((response) => (categories.value = response.data))
   .then(console.log(categories))
 
@@ -83,7 +83,7 @@ export default {
         };
 
         axios
-          .post("http://lynge.vps.webdock.cloud:3000/api/v1/request", data)
+          .post("http://localhost:3000/api/v1/request", data)
           .then((response) => {
             console.log("Response:", response.data);
 

@@ -65,7 +65,7 @@ export default {
 
       axios
         .delete(
-          `http://lynge.vps.webdock.cloud:3000/api/v1/request/${requestId}`
+          `http://localhost:3000/api/v1/request/${requestId}`
         )
         .then(() => {
           console.log("Request deleted successfully");
