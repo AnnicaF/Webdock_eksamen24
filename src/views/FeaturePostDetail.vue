@@ -19,7 +19,7 @@ const fetchPostDetails = async () => {
   const requestId = proxy.$route.params.requestId;
   try {
     const response = await axios.get(
-      `http://lynge.vps.webdock.cloud:3000/api/v1/request/${requestId}`
+      `http://localhost3000/api/v1/request/${requestId}`
     );
     selectedPost.value = response.data;
     console.log(selectedPost.value);
@@ -38,7 +38,7 @@ const doComment = (newComment) => {
   };
   axios
     .post(
-      `http://lynge.vps.webdock.cloud:3000/api/v1/request/${selectedPost.value.id}/comment`,
+      `http://localhost:3000/api/v1/request/${selectedPost.value.id}/comment`,
       data
     )
     .then((response) => {
@@ -85,7 +85,7 @@ import { ref, onMounted, computed } from "vue";
 export default {
   props: {
     roleID: Number,
-    requestId: Number
+    requestId: Number,
   },
   components: {
     PostDetail,
@@ -93,7 +93,6 @@ export default {
     NavBar,
     AdminPanel,
   },
-
 };
 </script>
 

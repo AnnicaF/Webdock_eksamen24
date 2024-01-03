@@ -10,7 +10,7 @@ const requests = ref(null);
 
 function get() {
   axios
-    .get("http://lynge.vps.webdock.cloud:3000/api/v1/request")
+    .get("http://localhost:3000/api/v1/request")
     .then((response) => {
       requests.value = response.data;
       console.log(response);
@@ -25,7 +25,7 @@ function category(cat) {
     get();
   } else {
     axios
-      .get("http://lynge.vps.webdock.cloud:3000/api/v1/cat", {
+      .get("http://localhost:3000/api/v1/cat", {
         params: {
           c: cat,
         },
@@ -40,7 +40,7 @@ function category(cat) {
 function search(searchQuery) {
   console.log(searchQuery);
   axios
-    .get("http://lynge.vps.webdock.cloud:3000/api/v1/search", {
+    .get("http://localhost:3000/api/v1/search", {
       params: {
         q: searchQuery,
       },
@@ -79,7 +79,7 @@ get();
       />
     </button>
   </div>
-  <Footer/>
+  <Footer />
 </template>
 
 <script>

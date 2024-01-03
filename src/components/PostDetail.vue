@@ -59,7 +59,7 @@ export default {
           userId: localStorage.getItem("userId"),
         };
         axios
-          .post("http://lynge.vps.webdock.cloud:3000/api/v1/like", data)
+          .post("http://localhost:3000/api/v1/like", data)
           .then((response) => {
             console.log("Response:", response.data);
             this.$router.go();

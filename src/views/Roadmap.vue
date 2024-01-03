@@ -7,7 +7,7 @@ import { ref } from "vue";
 const requests = ref(null);
 
 axios
-  .get("http://lynge.vps.webdock.cloud:3000/api/v1/request")
+  .get("http://localhost:3000/api/v1/request")
   .then((response) => {
     requests.value = response.data;
     console.log(response);

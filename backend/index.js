@@ -29,6 +29,6 @@ app.use(express.json());
 app.use("/api", apiRoutes);
 
 app.listen(port, async () => {
-  console.log(`server run at http://lynge.vps.webdock.cloud${port}`);
+  console.log(`server run at http://localhost${port}`);
   await connectToDb();
 });
