@@ -1,71 +1,235 @@
 <template>
-    <button @click="mergePost" class="mergeButton">
-      <font-awesome-icon class="fa-cm" icon="fa-solid fa-code-merge" />Merge
-      Post
+  <div>
+    <button @click="openMergeModal">
+      <font-awesome-icon
+        class="fa-cm"
+        icon="fa-solid fa-code-merge"
+      ></font-awesome-icon>
+      Merge Post
     </button>
+
+    <button @click="openDetailsModal" v-if="selectedRequest">
+      View Request
+    </button>
+
+    <div v-if="showMergeModal" class="modal-overlay">
+      <div class="modal">
+        <div class="buttonContainer">
+          <h2>You are merging:</h2>
+          <h3>{{ currentRequest.title }}</h3>
+          <h2>into</h2>
+          <select v-model="selectedRequest" @change="handleSelectionChange">
+            <option
+              v-for="request in filteredRequests"
+              :key="request.id"
+              :value="request.id"
+            >
+              {{ request.title }}
+            </option>
+          </select>
+
+          <button v-if="selectedRequest" @click="viewDetails">
+            View Request
+          </button>
+
+          <div class="buttonContainer">
+            <button @click="mergeRequests" class="mergeButton">Merge</button>
+            <button @click="closeMergeModal" class="cancelButton">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="showDetailsModal" class="modal-overlay">
+      <div class="details-modal">
+        <div class="buttonContainer">
+          <h2 class="modal-title">
+            <span>{{ selectedRequestDetails.title }}</span>
+          </h2>
+          <p>{{ selectedRequestDetails.createdAt }}</p>
+          <p>{{ selectedRequestDetails.bodyText }}</p>
+
+          <div class="buttonContainer">
+            <button @click="closeDetailsModal" class="cancelButton">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
+
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      post1: {},
-      post2: {},
-      mergedPost: null,
+      showMergeModal: false,
+      currentRequest: {},
+      allRequests: [],
+      selectedRequest: null,
+      modalTitle: "",
+      showDetailsModal: false,
+      selectedRequestDetails: {},
+      showConfirmationModal: false,
     };
   },
+  computed: {
+    filteredRequests() {
+      // Filtrer anmodninger for at udelukke den aktuelle anmodning
+      return this.allRequests.filter(
+        (request) => request.id !== this.currentRequest.id
+      );
+    },
+  },
   methods: {
-    async mergePosts() {
-      // Fetch posts from your API or provide post data here
-      const post1Response = await this.fetchPost(1);
-      const post2Response = await this.fetchPost(2);
+    openMergeModal() {
+      const requestId = this.$route.params.requestId;
 
-    
-      if (post1Response.error || post2Response.error) {
-        console.error("Failed to fetch posts");
-        return;
-      }
+      // Fetch the current request from the backend
+      axios
+        .get(`http://localhost:3001/api/v1/merge/current/${requestId}`)
+        .then((response) => {
+          this.currentRequest = response.data;
+        })
+        .catch((error) => {
+          console.error("Error fetching current request:", error);
+        });
 
-      // Merge posts
-      this.mergedPost = this.mergeData(post1Response.data, post2Response.data);
+      // Fetch all requests from the backend
+      axios
+        .get("http://localhost:3001/api/v1/merge/all")
+        .then((response) => {
+          this.allRequests = response.data;
+        })
+        .catch((error) => {
+          console.error("Error fetching all requests:", error);
+        });
+
+      this.showMergeModal = true;
     },
-    async fetchPost(postId) {
-      try {
-        const response = await this.$axios.get(`/api/posts/${postId}`);
-        return { data: response.data };
-      } catch (error) {
-        return { error: error.message };
-      }
+    closeMergeModal() {
+      this.showMergeModal = false;
     },
-    mergeData(post1, post2) {
-      // Your custom logic to merge two posts
-      // For example, you can merge fields, concatenate content, etc.
-      return {
-        id: post1.id, // Keep the ID of the first post
-        title: `${post1.title} - ${post2.title}`, // Concatenate titles
-        content: `${post1.content}\n\n${post2.content}`, // Concatenate content
-      };
+    handleSelectionChange() {
+      // Handle dropdown selection change if needed
+    },
+    mergeRequests() {
+      // Perform the merge by sending a request to the backend
+      axios
+        .post("http://localhost:3001/api/v1/merge", {
+          currentRequestId: this.currentRequest.id,
+          selectedRequestId: this.selectedRequest,
+        })
+        .then((response) => {
+          console.log("Merge successful:", response.data.message);
+          this.closeMergeModal();
+        })
+        .catch((error) => {
+          console.error("Error merging requests:", error);
+        });
+    },
+    viewDetails() {
+      // Fetch details for the selected request
+      const selectedRequest = this.allRequests.find(
+        (request) => request.id === this.selectedRequest
+      );
+      this.selectedRequestDetails = selectedRequest;
+      this.showDetailsModal = true;
+    },
+    closeDetailsModal() {
+      this.showDetailsModal = false;
     },
   },
 };
 </script>
 
 <style scoped>
-.fa-cm {
-  padding-right: 5px;
+h2 {
+  font-size: 18px;
+  padding-bottom: 20px;
+  font-weight: 300;
 }
-.adminButton button {
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 50px;
+}
+
+.buttonContainer {
+  margin-top: 20px;
+}
+
+.mergeButton {
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  border: 1px solid black;
+  margin-right: 10px;
+}
+
+.cancelButton {
+  background-color: rgb(225, 69, 69);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  border: 1px solid black;
+}
+
+button {
   color: black;
   font-size: 10px;
-  padding: 6px;
+  padding: 12px;
   margin: 0px;
   cursor: pointer;
   background: white;
   border: 1px solid black;
   border-radius: 5px;
 }
+h2 {
+  font-weight: 700;
+}
 
-button:hover {
-  background-color: var(--grey-mid);
+h3 {
+  font-weight: 300;
+  padding-bottom: 15px;
+}
+
+.details-modal {
+  background: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 20px;
+  width: 400px; /* Juster bredden efter behov */
+}
+
+.modal-title {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 </style>

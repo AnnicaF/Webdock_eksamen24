@@ -57,7 +57,7 @@ export default {
       const postId = this.selectedPost.id; // Juster dette baseret på din datastruktur
       try {
         const response = await axios.post(
-          `http://localhost:3000/api/v1/request/${requestId}/comment`,
+          `http://localhost:3001/api/v1/request/${requestId}/comment`,
           {
             text: this.newComment,
           }

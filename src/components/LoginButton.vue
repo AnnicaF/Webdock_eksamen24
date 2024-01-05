@@ -29,7 +29,7 @@ export default {
 
         // Send et POST request til authenticate med ssoToken til vores backend endpoint
         const response = await fetch(
-          "http://localhost:3000/api/v1/authenticate",
+          "http://localhost:3001/api/v1/authenticate",
           {
             method: "POST",
             headers: {

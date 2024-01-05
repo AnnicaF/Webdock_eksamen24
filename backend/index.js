@@ -21,7 +21,7 @@ const connectToDb = async () => {
 module.exports = { sequelize, connectToDb };
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(cors());
 

@@ -1,8 +1,9 @@
 const express = require("express");
 const requests = require("../controller/requests");
-const likes = require("../controller/likes")
+const likes = require("../controller/likes");
 const categories = require("../controller/categories");
 const auth = require("../controller/auth");
+const merges = require("../controller/merges");
 const router = express.Router();
 
 //Request
@@ -27,5 +28,10 @@ router.get("/v1/cat", requests.showCat);
 
 //Login
 router.post("/v1/authenticate", auth.authentication);
+
+// Merge
+router.get("/v1/merge/current/:id", merges.getCurrentRequest);
+router.get("/v1/merge/all", merges.getAllRequests);
+router.post("/v1/merge", merges.mergeRequests);
 
 module.exports = router;
