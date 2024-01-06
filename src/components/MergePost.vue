@@ -170,9 +170,15 @@ export default {
         .then((response) => {
           console.log("Merge successful:", response.data.message);
           this.closeMergeModal();
+
+          this.$router.push({ path: "/" });
         })
+
         .catch((error) => {
           console.error("Error merging requests:", error);
+        })
+        .finally(() => {
+          this.showConfirmModal = false; // Luk også bekræftelsesmodalen her, uanset om det lykkedes eller ej
         });
     },
     cancelMerge() {
