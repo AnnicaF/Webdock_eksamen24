@@ -14,7 +14,7 @@
 
     <div v-if="showMergeModal" class="modal-overlay">
       <div class="modal">
-        <div class="buttonContainer">
+        <div class="modalContainer">
           <h2>You are merging:</h2>
           <h3>{{ currentRequest.title }}</h3>
           <h2>into</h2>
@@ -28,12 +28,32 @@
             </option>
           </select>
 
-          <button v-if="selectedRequest" @click="viewDetails">
-            View Request
-          </button>
+          <div class="detail-button">
+            <button
+              v-if="selectedRequest"
+              @click="viewDetails"
+              class="viewRequestButton"
+            >
+              <font-awesome-icon
+                class="fa-cm"
+                icon="fa-solid fa-eye"
+              ></font-awesome-icon>
+              View Request
+            </button>
+          </div>
 
           <div class="buttonContainer">
-            <button @click="mergeRequests" class="mergeButton">Merge</button>
+            <button
+              @click="mergeRequests"
+              class="mergeButton"
+              :disabled="!selectedRequest"
+            >
+              <font-awesome-icon
+                class="fa-cm"
+                icon="fa-solid fa-code-merge"
+              ></font-awesome-icon
+              >Merge
+            </button>
             <button @click="closeMergeModal" class="cancelButton">
               Cancel
             </button>
@@ -48,7 +68,6 @@
           <h2 class="modal-title">
             <span>{{ selectedRequestDetails.title }}</span>
           </h2>
-          <p>{{ selectedRequestDetails.createdAt }}</p>
           <p>{{ selectedRequestDetails.bodyText }}</p>
 
           <div class="buttonContainer">
@@ -59,10 +78,27 @@
         </div>
       </div>
     </div>
+
+    <div v-if="showConfirmModal" class="modal-overlay">
+      <div class="modal">
+        <div class="buttonContainer">
+          <h2>Confirm Merge</h2>
+          <p>Are you sure you want to merge?</p>
+          <div class="buttonContainer">
+            <button @click="confirmMerge" class="mergeButton">
+              <font-awesome-icon
+                class="fa-cm"
+                icon="fa-solid fa-code-merge"
+              ></font-awesome-icon>
+              Yes, Merge
+            </button>
+            <button @click="cancelMerge" class="cancelButton">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
-
 <script>
 import axios from "axios";
 
@@ -76,14 +112,13 @@ export default {
       modalTitle: "",
       showDetailsModal: false,
       selectedRequestDetails: {},
-      showConfirmationModal: false,
+      showConfirmModal: false,
     };
   },
   computed: {
     filteredRequests() {
-      // Filtrer anmodninger for at udelukke den aktuelle anmodning
       return this.allRequests.filter(
-        (request) => request.id !== this.currentRequest.id
+        (request) => request.id !== this.currentRequest.id && !request.merged
       );
     },
   },
@@ -91,7 +126,6 @@ export default {
     openMergeModal() {
       const requestId = this.$route.params.requestId;
 
-      // Fetch the current request from the backend
       axios
         .get(`http://localhost:3001/api/v1/merge/current/${requestId}`)
         .then((response) => {
@@ -101,7 +135,6 @@ export default {
           console.error("Error fetching current request:", error);
         });
 
-      // Fetch all requests from the backend
       axios
         .get("http://localhost:3001/api/v1/merge/all")
         .then((response) => {
@@ -115,16 +148,24 @@ export default {
     },
     closeMergeModal() {
       this.showMergeModal = false;
+      // Nulstil valgt anmodning ved lukning af modal
+      this.selectedRequest = null;
     },
     handleSelectionChange() {
       // Handle dropdown selection change if needed
     },
     mergeRequests() {
-      // Perform the merge by sending a request to the backend
+      this.showConfirmModal = true;
+    },
+    confirmMerge() {
+      // Udfør faktisk merge-aktionen her
+      const currentRequestId = this.currentRequest.id;
+      const selectedRequestId = this.selectedRequest;
+
       axios
         .post("http://localhost:3001/api/v1/merge", {
-          currentRequestId: this.currentRequest.id,
-          selectedRequestId: this.selectedRequest,
+          currentRequestId,
+          selectedRequestId,
         })
         .then((response) => {
           console.log("Merge successful:", response.data.message);
@@ -134,8 +175,10 @@ export default {
           console.error("Error merging requests:", error);
         });
     },
+    cancelMerge() {
+      this.showConfirmModal = false;
+    },
     viewDetails() {
-      // Fetch details for the selected request
       const selectedRequest = this.allRequests.find(
         (request) => request.id === this.selectedRequest
       );
@@ -176,6 +219,10 @@ h2 {
 }
 
 .buttonContainer {
+  margin-top: 30px;
+  text-align: center;
+}
+.modalContainer {
   margin-top: 20px;
 }
 
@@ -224,12 +271,30 @@ h3 {
   border: 1px solid black;
   border-radius: 5px;
   padding: 20px;
-  width: 400px; /* Juster bredden efter behov */
+  width: 400px;
 }
 
 .modal-title {
   font-weight: bold;
   font-size: 20px;
   margin-bottom: 10px;
+}
+
+.viewRequestButton {
+  color: black;
+  font-size: 10px;
+  padding: 6px;
+  margin: 0px;
+  cursor: pointer;
+  background: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+.fa-cm {
+  margin-right: 5px;
+}
+select {
+  height: 25px;
 }
 </style>

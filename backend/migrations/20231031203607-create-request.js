@@ -48,6 +48,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      merged: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
     });
 
     await queryInterface.addConstraint("Requests", {

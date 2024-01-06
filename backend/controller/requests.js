@@ -5,6 +5,9 @@ const axios = require("axios");
 exports.show = async (req, res) => {
   try {
     const requests = await Request.findAll({
+      where: { 
+        merged: false,
+      },
       include: [{
         model: User
       },
@@ -18,6 +21,7 @@ exports.show = async (req, res) => {
         model: Like
       }],
     });
+    
     return res.status(200).json(requests);
   } catch (err) {
     console.log(err);
