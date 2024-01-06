@@ -26,26 +26,22 @@ exports.getAllRequests = async (req, res) => {
 
 exports.mergeRequests = async (req, res) => {
   try {
-    // Find den nuværende anmodning og den valgte anmodning
     const currentRequest = await Request.findByPk(req.body.currentRequestId);
     const selectedRequest = await Request.findByPk(req.body.selectedRequestId);
 
-    // Hvis en eller begge anmodninger ikke eksisterer, kast en fejl
-    if (!currentRequest || !selectedRequest) {
-      return res.status(404).json({ error: "One or both requests not found" });
-    }
+    // Perform the merging logic here
 
-    // Performér eventuel anden logik for sammenføjning her
-
-    // Opret en kommentar i den valgte anmodning med detaljer fra den nuværende anmodning
+    // Create a comment in the selected request with details from the current request
     await Comment.create({
+      title: currentRequest.title,
       bodyText: currentRequest.bodyText,
-      userID: 22475, // Dette skal muligvis justeres baseret på din brugerlogik
+      userID: 22475,
       requestID: selectedRequest.id,
     });
 
-    // Opdater 'merged' attributten for den nuværende anmodning
-    await currentRequest.update({ merged: true });
+    // Set the merged flag to true for the current request
+    currentRequest.merged = true;
+    await currentRequest.save();
 
     res.json({ message: "Requests merged successfully" });
   } catch (error) {

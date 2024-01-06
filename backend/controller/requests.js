@@ -1,27 +1,30 @@
 const { Op } = require("sequelize");
-const {Request, Comment, User, Status, Like} = require("../models");
+const { Request, Comment, User, Status, Like } = require("../models");
 const axios = require("axios");
 
 exports.show = async (req, res) => {
   try {
     const requests = await Request.findAll({
-      where: { 
+      where: {
         merged: false,
       },
-      include: [{
-        model: User
-      },
-      {
-        model: Status
-      },
-      {
-        model: Comment
-      },
-      {
-        model: Like
-      }],
+      include: [
+        {
+          model: User,
+        },
+        {
+          model: Status,
+        },
+        {
+          model: Comment,
+        },
+        {
+          model: Like,
+        },
+      ],
+      where: { merged: false },
     });
-    
+
     return res.status(200).json(requests);
   } catch (err) {
     console.log(err);
@@ -51,25 +54,27 @@ exports.search = async (req, res) => {
           },
         ],
       },
-      include: [{
-        model: User
-      },
-      {
-        model: Status
-      },
-      {
-        model: Comment
-      },
-      {
-        model: Like
-      }],
+      include: [
+        {
+          model: User,
+        },
+        {
+          model: Status,
+        },
+        {
+          model: Comment,
+        },
+        {
+          model: Like,
+        },
+      ],
     });
     return res.status(200).json(requests);
   } catch (err) {
     console.log(err);
     return res.send("Error");
   }
-}
+};
 
 //get one request (+ user + comment)
 exports.showOne = async (req, res) => {
@@ -83,38 +88,39 @@ exports.showOne = async (req, res) => {
       },
       {
         model: Comment,
-        include: User
+        include: User,
       },
       {
-        model: Like
-      }
-    ]
+        model: Like,
+      },
+    ],
   });
   res.status(200).json(request);
-
 };
 
 //get request from 1 category
 exports.showCat = async (req, res) => {
-  try{
-    const cat = req.query.c
+  try {
+    const cat = req.query.c;
     console.log(cat);
     const requests = await Request.findAll({
       where: {
-        categoryID: cat
+        categoryID: cat,
       },
-      include: [{
-        model: User
-      },
-      {
-        model: Status
-      },
-      {
-        model: Comment
-      },
-      {
-        model: Like
-      }],
+      include: [
+        {
+          model: User,
+        },
+        {
+          model: Status,
+        },
+        {
+          model: Comment,
+        },
+        {
+          model: Like,
+        },
+      ],
     });
     return res.status(200).json(requests);
   } catch (err) {
@@ -122,7 +128,6 @@ exports.showCat = async (req, res) => {
     return res.send("Error");
   }
 };
-
 
 //create a new request
 exports.create = async (req, res) => {
@@ -213,13 +218,15 @@ exports.deleteRequest = async (req, res) => {
 
   try {
     // Find anmodningen baseret på requestId med tilknyttede kommentarer
-    const request = await Request.findByPk(requestId, { include: [Comment, Like] });
+    const request = await Request.findByPk(requestId, {
+      include: [Comment, Like],
+    });
 
     if (!request) {
       return res.status(404).json({ error: "Anmodning ikke fundet" });
     }
-     // Delete associated likes
-     await Like.destroy({ where: { requestID: requestId } });
+    // Delete associated likes
+    await Like.destroy({ where: { requestID: requestId } });
 
     await Comment.destroy({ where: { requestID: requestId } });
 
@@ -231,5 +238,3 @@ exports.deleteRequest = async (req, res) => {
     return res.status(500).json({ error: "Internt serverproblem" });
   }
 };
-
-
