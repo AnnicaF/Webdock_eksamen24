@@ -22,7 +22,6 @@ exports.show = async (req, res) => {
           model: Like,
         },
       ],
-      where: { merged: false },
     });
 
     return res.status(200).json(requests);

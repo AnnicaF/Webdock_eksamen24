@@ -9,11 +9,20 @@
     <div class="container">
       <ul v-if="sortedComments.length > 0">
         <li v-for="comment in sortedComments" :key="comment.id">
-          <div class="comment-content">
+          <div
+            :class="{
+              'comment-content': true,
+              'merged-comment': comment.isMerged,
+            }"
+          >
             <p>
               <strong>{{ comment.User.name }}</strong>
             </p>
-            <p>{{ comment.bodyText }}</p>
+            <p v-if="comment.isMerged" class="merged-comment">
+              <span class="merged-label">Merged in from:</span>
+              <span class="merged-title" v-html="comment.bodyText"></span>
+            </p>
+            <p v-else v-html="comment.bodyText"></p>
             <hr />
             <p class="comment-date">
               {{ new Date(comment.createdAt).toLocaleDateString("en-GB") }}
@@ -50,6 +59,11 @@ export default {
     addComment() {
       this.$emit("addComment", this.newComment);
       console.log(this.newComment);
+      // Clear the input field
+      this.newComment = "";
+    },
+    addComment() {
+      this.$emit("addComment", this.newComment);
       // Clear the input field
       this.newComment = "";
     },
@@ -112,5 +126,21 @@ textarea {
   border-radius: 4px;
   color: var(--white);
   font-size: 12px;
+}
+
+.merged-comment {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+.merged-label {
+  font-weight: bold;
+  padding-right: 10px;
+}
+
+.merged-title {
+  font-style: italic;
 }
 </style>

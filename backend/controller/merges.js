@@ -37,6 +37,7 @@ exports.mergeRequests = async (req, res) => {
       bodyText: currentRequest.bodyText,
       userID: 22475,
       requestID: selectedRequest.id,
+      isMerged: true,
     });
 
     // Set the merged flag to true for the current request
