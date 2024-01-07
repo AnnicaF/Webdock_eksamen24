@@ -33,8 +33,7 @@ exports.mergeRequests = async (req, res) => {
 
     // Create a comment in the selected request with details from the current request
     await Comment.create({
-      title: currentRequest.title,
-      bodyText: currentRequest.bodyText,
+      bodyText: ` ${currentRequest.title}\n<br/><br/> ${currentRequest.bodyText}`,
       userID: 22475,
       requestID: selectedRequest.id,
       isMerged: true,

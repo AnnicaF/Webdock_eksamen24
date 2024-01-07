@@ -18,7 +18,7 @@
             <p>
               <strong>{{ comment.User.name }}</strong>
             </p>
-            <p v-if="comment.isMerged" class="merged-comment">
+            <p v-if="comment.isMerged" class="merged-comments">
               <span class="merged-label">Merged in from:</span>
               <span class="merged-title" v-html="comment.bodyText"></span>
             </p>
@@ -128,19 +128,18 @@ textarea {
   font-size: 12px;
 }
 
-.merged-comment {
+.merged-comments {
   background-color: #f0f0f0;
   padding: 10px;
   border-radius: 10px;
   margin-top: 5px;
+  border: 1px solid #c6c4c4;
+  margin-bottom: 10px;
 }
 
 .merged-label {
   font-weight: bold;
-  padding-right: 10px;
-}
-
-.merged-title {
-  font-style: italic;
+  padding-right: 8px;
+  padding-bottom: 10px;
 }
 </style>
