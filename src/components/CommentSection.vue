@@ -74,6 +74,7 @@ export default {
           `http://localhost:300/api/v1/request/${requestId}/comment`,
           {
             text: this.newComment,
+            userID: localStorage.getItem("userId"), // Tilføj userID fra localStorage
           }
         );
 
