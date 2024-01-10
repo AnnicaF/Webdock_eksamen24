@@ -68,13 +68,13 @@ export default {
       this.newComment = "";
     },
     async handleAddComment() {
-      const postId = this.selectedPost.id; // Juster dette baseret på din datastruktur
+      const requestId = this.selectedRequest.id;
       try {
         const response = await axios.post(
           `http://localhost:300/api/v1/request/${requestId}/comment`,
           {
             text: this.newComment,
-            userID: localStorage.getItem("userId"), // Tilføj userID fra localStorage
+            userID: 22475,
           }
         );
 

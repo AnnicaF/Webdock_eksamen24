@@ -29,13 +29,12 @@ exports.mergeRequests = async (req, res) => {
     const currentRequest = await Request.findByPk(req.body.currentRequestId);
     const selectedRequest = await Request.findByPk(req.body.selectedRequestId);
 
-    const userId = req.body.userId;
     // Perform the merging logic here
 
     // Create a comment in the selected request with details from the current request
     await Comment.create({
       bodyText: ` ${currentRequest.title}\n<br/><br/> ${currentRequest.bodyText}`,
-      userID: userId,
+      userID: 22475,
       requestID: selectedRequest.id,
       isMerged: true,
     });
