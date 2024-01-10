@@ -30,8 +30,8 @@ router.get("/v1/cat", requests.showCat);
 router.post("/v1/authenticate", auth.authentication);
 
 // Merge
-router.get("/v1/merge/current/:id", merges.getCurrentRequest);
-router.get("/v1/merge/all", merges.getAllRequests);
+router.get("/v1/merge/current/:id", merges.currentRequest);
+router.get("/v1/merge/all", merges.allRequests);
 router.post("/v1/merge", merges.mergeRequests);
 
 module.exports = router;

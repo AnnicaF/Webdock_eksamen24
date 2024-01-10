@@ -1,6 +1,6 @@
 const { Request, Comment } = require("../models");
 
-exports.getCurrentRequest = async (req, res) => {
+exports.currentRequest = async (req, res) => {
   try {
     const currentRequest = await Request.findOne({
       where: { id: req.params.id },
@@ -14,7 +14,7 @@ exports.getCurrentRequest = async (req, res) => {
   }
 };
 
-exports.getAllRequests = async (req, res) => {
+exports.allRequests = async (req, res) => {
   try {
     const allRequests = await Request.findAll();
     res.json(allRequests);

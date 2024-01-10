@@ -3,6 +3,7 @@ const apiRoutes = require("./routes/api");
 const { Sequelize } = require("sequelize");
 const config = require("./config/config.json");
 const cors = require("cors");
+const helmet = require("helmet");
 
 const environment = process.env.NODE_ENV || "development";
 const dbConfig = config[environment];
@@ -24,6 +25,17 @@ const app = express();
 const port = 3001;
 
 app.use(cors());
+
+// tilføjet helmet med CSP
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"],
+    },
+  })
+);
 
 app.use(express.json());
 app.use("/api", apiRoutes);
