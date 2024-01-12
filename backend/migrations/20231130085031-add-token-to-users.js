@@ -12,3 +12,4 @@ module.exports = {
     await queryInterface.removeColumn("Users", "token");
   },
 };
+// Sequelize er globalt tilgængeligt så de kunne fjernes

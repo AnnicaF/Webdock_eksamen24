@@ -20,10 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       bodyText: DataTypes.TEXT,
       userID: DataTypes.INTEGER,
       requestID: DataTypes.INTEGER,
-      isMerged: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
+      isMerged: DataTypes.BOOLEAN,
     },
     {
       sequelize,

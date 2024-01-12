@@ -20,7 +20,7 @@ exports.authentication = async (req, res) => {
         email: user.email,
         avatarURL: user.avatarURL,
         token: ssoToken,
-        roleID: 1, // Include the token in the database
+        roleID: 1,
       },
     });
 
@@ -32,7 +32,7 @@ exports.authentication = async (req, res) => {
           email: email || user.email,
           avatarURL: avatarURL || user.avatarURL,
           token: ssoToken,
-          roleID: 1, // Include the token in the database
+          roleID: 1, 
         },
         { where: { id: user.id } }
       );

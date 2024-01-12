@@ -1,4 +1,9 @@
 const { Request, Comment } = require("../models");
+const createDOMPurify = require("dompurify");
+const { JSDOM } = require("jsdom");
+
+const window = new JSDOM("").window;
+const DOMPurify = createDOMPurify(window);
 
 exports.currentRequest = async (req, res) => {
   try {
@@ -29,11 +34,11 @@ exports.mergeRequests = async (req, res) => {
     const currentRequest = await Request.findByPk(req.body.currentRequestId);
     const selectedRequest = await Request.findByPk(req.body.selectedRequestId);
 
-    // Perform the merging logic here
+    const sanitizedTitle = DOMPurify.sanitize(currentRequest.title);
+    const sanitizedBodyText = DOMPurify.sanitize(currentRequest.bodyText);
 
-    // Create a comment in the selected request with details from the current request
     await Comment.create({
-      bodyText: ` ${currentRequest.title}\n<br/><br/> ${currentRequest.bodyText}`,
+      bodyText: ` ${sanitizedTitle}\n<br/><br/> ${sanitizedBodyText}`,
       userID: 22475,
       requestID: selectedRequest.id,
       isMerged: true,
