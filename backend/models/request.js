@@ -17,10 +17,11 @@ module.exports = (sequelize, DataTypes) => {
       Request.belongsTo(models.User, { foreignKey: "userID" });
       models.User.hasMany(Request);
 
-
       Request.hasMany(models.Comment, { foreignKey: "requestID" });
-      Request.hasMany(models.Like, { foreignKey: "requestID",
-      onDelete: "CASCADE", });
+      Request.hasMany(models.Like, {
+        foreignKey: "requestID",
+        onDelete: "CASCADE",
+      });
 
       Request.hasMany(models.Comment, {
         foreignKey: "requestID",
@@ -35,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       statusID: DataTypes.INTEGER,
       categoryID: DataTypes.INTEGER,
       userID: DataTypes.INTEGER,
+      merged: DataTypes.BOOLEAN,
     },
     {
       sequelize,

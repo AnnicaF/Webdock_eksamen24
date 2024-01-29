@@ -19,7 +19,7 @@ const fetchPostDetails = async () => {
   const requestId = proxy.$route.params.requestId;
   try {
     const response = await axios.get(
-      `http://localhost3000/api/v1/request/${requestId}`
+      `http://localhost:3001/api/v1/request/${requestId}`
     );
     selectedPost.value = response.data;
     console.log(selectedPost.value);
@@ -38,7 +38,7 @@ const doComment = (newComment) => {
   };
   axios
     .post(
-      `http://localhost:3000/api/v1/request/${selectedPost.value.id}/comment`,
+      `http://localhost:3001/api/v1/request/${selectedPost.value.id}/comment`,
       data
     )
     .then((response) => {
@@ -59,7 +59,6 @@ fetchPostDetails();
       <p>Loading...</p>
     </template>
     <template v-else>
-      <!-- Vis PostDetail og CommentSection her -->
       <PostDetail :post="selectedPost" />
       <template v-if="isAdmin && selectedPost">
         <AdminPanel
@@ -73,7 +72,6 @@ fetchPostDetails();
       />
     </template>
   </div>
-  <!-- <Footer /> -->
 </template>
 
 <script>

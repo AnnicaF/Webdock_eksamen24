@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       bodyText: DataTypes.TEXT,
       userID: DataTypes.INTEGER,
       requestID: DataTypes.INTEGER,
+      isMerged: DataTypes.BOOLEAN,
     },
     {
       sequelize,

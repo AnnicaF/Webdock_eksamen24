@@ -1,6 +1,6 @@
 <template>
   <div class="adminContainer">
-    <MergePost class="adminButton" />
+    <MergePost />
     <button @click="showDeleteModal" class="adminButton">
       <font-awesome-icon class="fa-tc" icon="fa-solid fa-trash-can" />Delete
       Post
@@ -64,9 +64,7 @@ export default {
       }
 
       axios
-        .delete(
-          `http://localhost:3000/api/v1/request/${requestId}`
-        )
+        .delete(`http://localhost:3001/api/v1/request/${requestId}`)
         .then(() => {
           console.log("Request deleted successfully");
           this.$router.push("/");

@@ -62,7 +62,7 @@ export default {
         feature_request_id: requestId,
       };
       axios
-        .post("http://localhost:3000/api/v1/request/status", data)
+        .post("http://localhost:3001/api/v1/request/status", data)
         .then((res) => {
           console.log("successful: ", res);
         })

@@ -9,11 +9,20 @@
     <div class="container">
       <ul v-if="sortedComments.length > 0">
         <li v-for="comment in sortedComments" :key="comment.id">
-          <div class="comment-content">
+          <div
+            :class="{
+              'comment-content': true,
+              'merged-comment': comment.isMerged,
+            }"
+          >
             <p>
               <strong>{{ comment.User.name }}</strong>
             </p>
-            <p>{{ comment.bodyText }}</p>
+            <p v-if="comment.isMerged" class="merged-comments">
+              <span class="merged-label">Merged in from:</span>
+              <span class="merged-title" v-html="comment.bodyText"></span>
+            </p>
+            <p v-else v-html="comment.bodyText"></p>
             <hr />
             <p class="comment-date">
               {{ new Date(comment.createdAt).toLocaleDateString("en-GB") }}
@@ -53,13 +62,19 @@ export default {
       // Clear the input field
       this.newComment = "";
     },
+    addComment() {
+      this.$emit("addComment", this.newComment);
+      // Clear the input field
+      this.newComment = "";
+    },
     async handleAddComment() {
-      const postId = this.selectedPost.id; // Juster dette baseret på din datastruktur
+      const requestId = this.selectedRequest.id;
       try {
         const response = await axios.post(
-          `http://localhost:3000/api/v1/request/${requestId}/comment`,
+          `http://localhost:300/api/v1/request/${requestId}/comment`,
           {
             text: this.newComment,
+            userID: 22475,
           }
         );
 
@@ -112,5 +127,20 @@ textarea {
   border-radius: 4px;
   color: var(--white);
   font-size: 12px;
+}
+
+.merged-comments {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 5px;
+  border: 1px solid #c6c4c4;
+  margin-bottom: 10px;
+}
+
+.merged-label {
+  font-weight: bold;
+  padding-right: 8px;
+  padding-bottom: 10px;
 }
 </style>
