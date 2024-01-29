@@ -104,6 +104,7 @@ import axios from "axios";
 
 export default {
   data() {
+    //gemme tilstand af attributter
     return {
       showMergeModal: false,
       currentRequest: {},
@@ -148,11 +149,8 @@ export default {
     },
     closeMergeModal() {
       this.showMergeModal = false;
-      // Nulstil valgt anmodning ved lukning af modal
+
       this.selectedRequest = null;
-    },
-    handleSelectionChange() {
-      // Handle dropdown selection change if needed
     },
     mergeRequests() {
       this.showConfirmModal = true;
@@ -178,7 +176,7 @@ export default {
           console.error("Error merging requests:", error);
         })
         .finally(() => {
-          this.showConfirmModal = false; // Luk også bekræftelsesmodalen her, uanset om det lykkedes eller ej
+          this.showConfirmModal = false;
         });
     },
     cancelMerge() {

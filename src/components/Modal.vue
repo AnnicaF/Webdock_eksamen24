@@ -18,10 +18,12 @@ axios
 <template>
   <div class="modal" id="modal">
     <div class="modal_content">
+
       <div class="modal_header">
         <h1 class="modal_title">Create a Post</h1>
         <span class="modal_close" @click="hide">&times;</span>
       </div>
+
       <div class="modal_body">
         <div class="form-group">
           <label for="category">Category:</label>
@@ -36,18 +38,22 @@ axios
             </option>
           </select>
         </div>
+
         <div class="form-group">
           <label for="title">Title:</label>
           <input type="text" id="title" v-model="postTitle" />
         </div>
+        
         <div class="form-group">
           <label for="description">Details</label>
           <textarea id="description" v-model="postDescription"></textarea>
         </div>
       </div>
+      
       <div class="modal_footer">
         <button class="post" @click="createPost">Create Post</button>
       </div>
+
     </div>
   </div>
 </template>
@@ -68,8 +74,7 @@ export default {
 
     createPost() {
       // Tjek om brugeren er logget ind baseret på local storage
-      const isAuthenticated =
-        localStorage.getItem("isAuthenticated") === "true";
+      const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
       const userId = localStorage.getItem("userId");
       const categoryBoth = document.getElementById("category").value.split(",");
 
